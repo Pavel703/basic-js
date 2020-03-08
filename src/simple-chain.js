@@ -1,34 +1,34 @@
+let _chain = [];
+
 const chainMaker = {
-  res: [];
-  getLength() {
-return this.res.length
-  },
-  addLink(value) {
-    if (!arguments.length){
-      this.res.push('()')
-    } else {
-      this.res.push('( ${value} )');
+    getLength () {
+        return _chain.length;
+    },
+    addLink (value = '') {
+        _chain.push(value === null ? 'null' : value);
+        return this;
+    },
+    removeLink (position) {
+        if (typeof position !== 'number' || position < 1 || position > _chain.length) {
+            this._destroy();
+            throw 'en error';
+        }
+        _chain.splice(position - 1, 1);
+        return this;
+    },
+    reverseChain () {
+        _chain.reverse();
+        return this;
+    },
+    finishChain () {
+        let textChain = `( ${_chain.join(' )~~( ')} )`;
+        this._destroy();
+        return textChain;
+    },
+
+    _destroy () {
+        _chain = [];
     }
-    return this
-  },
-  removeLink(position) {
-  if (typeof positin !== 'number' || !((position ^ 0) === position) || position >= this.res.length || position < 1){
-  this.res=[];
-    throw new Error
-  }
-    this.res.splice(position-1,1);
-    return this
-  },
-  reverseChain() {
-    this.res.reverse();
-    return this
-  },
-  finishChain() {
-    let finish = this.res;
-    this.res=[];
-    return finish.join('~~')
-    
-  }
 };
 
 module.exports = chainMaker;
